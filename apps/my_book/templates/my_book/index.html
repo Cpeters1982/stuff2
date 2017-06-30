@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>My Quotes</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        <a href="{% url 'mybook:index' %}">Home</a>
+        <a href="{% url 'mybook:addQuote' %}">Add Quote</a>
+        <a href="{% url 'login:logout' %}">Logout</a>
+    <h1>{{user.username}}'s Quotes</h1>
+    {# {% with user_id.favorites.all as favorite_quotes %}
+    {% for quote in quote_list %}
+    {% if quote in favorite_quotes %}Favorited{% endif %}
+    ...
+    {% endfor %}
+    {% endwith %}#}
+    {% for quote in quotes %}
+    <div>
+        <h1>{{quote.title}}</h1>
+            Created: {{quote.created_at}}
+        <div>
+            {{quote.content}}<br>
+            {# {{quote.Favorite.all.count}} Favorited this!#}
+            {% if quote.user_id != user %}
+                <form action="{% url 'mybook:addFavorite' %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" name="submit" value="submit">Favorite!</button>
+                    <input type="hidden" name="quote_id" value="{{quote.id}}">
+                </form>
+            {% endif %}
+        </div>
+    {% endfor %}
+    <h3></h3>
+    </body>
+</html>
